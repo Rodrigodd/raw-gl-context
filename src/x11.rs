@@ -122,10 +122,15 @@ impl GlContext {
             0,
         ];
 
+        let shared_context = config
+            .share
+            .map(|x| x.context.context)
+            .unwrap_or(std::ptr::null_mut());
+
         let context = glXCreateContextAttribsARB(
             display,
             *fb_config,
-            std::ptr::null_mut(),
+            shared_context,
             1,
             ctx_attribs.as_ptr(),
         );

@@ -18,8 +18,8 @@ mod macos;
 #[cfg(target_os = "macos")]
 use macos as platform;
 
-#[derive(Clone, Debug)]
-pub struct GlConfig {
+#[derive(Clone)]
+pub struct GlConfig<'s> {
     pub version: (u8, u8),
     pub profile: Profile,
     pub red_bits: u8,
@@ -32,9 +32,10 @@ pub struct GlConfig {
     pub srgb: bool,
     pub double_buffer: bool,
     pub vsync: bool,
+    pub share: Option<&'s GlContext>,
 }
 
-impl Default for GlConfig {
+impl Default for GlConfig<'_> {
     fn default() -> Self {
         GlConfig {
             version: (3, 2),
@@ -49,6 +50,7 @@ impl Default for GlConfig {
             srgb: true,
             double_buffer: true,
             vsync: false,
+            share: None,
         }
     }
 }

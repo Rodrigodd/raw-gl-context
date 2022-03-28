@@ -83,6 +83,9 @@ impl GlContext {
             return Err(GlError::CreationFailed);
         }
 
+        if config.share.is_some() {
+            unimplemented!();
+        }
         let view = NSOpenGLView::alloc(nil)
             .initWithFrame_pixelFormat_(parent_view.frame(), pixel_format);
 

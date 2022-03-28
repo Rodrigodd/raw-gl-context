@@ -254,11 +254,12 @@ impl GlContext {
             0
         ];
 
-        let hglrc = wglCreateContextAttribsARB.unwrap()(
-            hdc,
-            std::ptr::null_mut(),
-            ctx_attribs.as_ptr(),
-        );
+        let shared_context = config
+            .share
+            .map(|x| x.context.hglrc)
+            .unwrap_or(std::ptr::null_mut());
+
+        let hglrc = wglCreateContextAttribsARB.unwrap()(hdc, shared_context, ctx_attribs.as_ptr());
         if hglrc == std::ptr::null_mut() {
             return Err(GlError::CreationFailed);
         }
