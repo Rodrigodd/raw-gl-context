@@ -7,6 +7,7 @@ description = "Library for creating an OpenGL context from a RawWindowHandle"
 repository = "https://github.com/glowcoil/raw-gl-context"
 readme = "README.md"
 license = "MIT/Apache-2.0"
+build = "build.rs"
 
 [dependencies]
 raw-window-handle = "0.3.3"
