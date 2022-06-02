@@ -47,6 +47,11 @@ impl GlContext {
         parent: &impl HasRawWindowHandle,
         config: GlConfig,
     ) -> Result<GlContext, GlError> {
+        match config.api {
+            crate::Api::Gl => {}
+            crate::Api::Gles => return Err(GlError::ApiNotSupported),
+        }
+
         let handle = if let RawWindowHandle::Xlib(handle) = parent.raw_window_handle() {
             handle
         } else {
@@ -83,7 +88,8 @@ impl GlContext {
         ];
 
         let mut n_configs = 0;
-        let fb_config = glx::glXChooseFBConfig(display, screen, fb_attribs.as_ptr(), &mut n_configs);
+        let fb_config =
+            glx::glXChooseFBConfig(display, screen, fb_attribs.as_ptr(), &mut n_configs);
 
         if n_configs <= 0 {
             return Err(GlError::CreationFailed);

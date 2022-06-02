@@ -30,6 +30,11 @@ impl GlContext {
         parent: &impl HasRawWindowHandle,
         config: GlConfig,
     ) -> Result<GlContext, GlError> {
+        match config.api {
+            crate::Api::Gl => {}
+            crate::Api::Gles => return Err(GlError::ApiNotSupported),
+        }
+
         let handle = if let RawWindowHandle::MacOS(handle) = parent.raw_window_handle() {
             handle
         } else {
@@ -86,8 +91,8 @@ impl GlContext {
         if config.share.is_some() {
             unimplemented!();
         }
-        let view = NSOpenGLView::alloc(nil)
-            .initWithFrame_pixelFormat_(parent_view.frame(), pixel_format);
+        let view =
+            NSOpenGLView::alloc(nil).initWithFrame_pixelFormat_(parent_view.frame(), pixel_format);
 
         if view == nil {
             return Err(GlError::CreationFailed);

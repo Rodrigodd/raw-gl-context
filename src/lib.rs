@@ -18,8 +18,20 @@ mod macos;
 #[cfg(target_os = "macos")]
 use macos as platform;
 
+#[cfg(target_os = "android")]
+mod android;
+#[cfg(target_os = "android")]
+use android as platform;
+
+#[derive(Clone, Copy)]
+pub enum Api {
+    Gl,
+    Gles,
+}
+
 #[derive(Clone)]
 pub struct GlConfig<'s> {
+    pub api: Api,
     pub version: (u8, u8),
     pub profile: Profile,
     pub red_bits: u8,
@@ -38,6 +50,7 @@ pub struct GlConfig<'s> {
 impl Default for GlConfig<'_> {
     fn default() -> Self {
         GlConfig {
+            api: Api::Gl,
             version: (3, 2),
             profile: Profile::Core,
             red_bits: 8,
@@ -63,8 +76,13 @@ pub enum Profile {
 
 #[derive(Debug)]
 pub enum GlError {
+    /// The WindowHandle returned by `parent` is not a valid handle for the platform.
     InvalidWindowHandle,
+    /// The opengl version is not supported by the platform.
     VersionNotSupported,
+    /// The required [`Api`] is not supported by the platform.
+    ApiNotSupported,
+    /// Some error was encounter while creation the Context.
     CreationFailed,
 }
 

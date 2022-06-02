@@ -80,6 +80,11 @@ impl GlContext {
         parent: &impl HasRawWindowHandle,
         config: GlConfig,
     ) -> Result<GlContext, GlError> {
+        match config.api {
+            crate::Api::Gl => {}
+            crate::Api::Gles => return Err(GlError::ApiNotSupported),
+        }
+
         let handle = if let RawWindowHandle::Windows(handle) = parent.raw_window_handle() {
             handle
         } else {
@@ -92,8 +97,7 @@ impl GlContext {
 
         // Create temporary window and context to load function pointers
 
-        let class_name_str =
-            format!("raw-gl-context-window-{}", uuid::Uuid::new_v4().to_simple());
+        let class_name_str = format!("raw-gl-context-window-{}", uuid::Uuid::new_v4().to_simple());
         let mut class_name: Vec<WCHAR> = OsStr::new(&class_name_str).encode_wide().collect();
         class_name.push(0);
 
