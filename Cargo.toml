@@ -10,7 +10,7 @@ license = "MIT/Apache-2.0"
 build = "build.rs"
 
 [dependencies]
-raw-window-handle = "0.3.3"
+raw-window-handle = "0.5.0"
 log = "0.4.14"
 
 [target.'cfg(target_os="windows")'.dependencies]

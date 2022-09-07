@@ -85,7 +85,7 @@ impl GlContext {
             crate::Api::Gles => return Err(GlError::ApiNotSupported),
         }
 
-        let handle = if let RawWindowHandle::Windows(handle) = parent.raw_window_handle() {
+        let handle = if let RawWindowHandle::Win32(handle) = parent.raw_window_handle() {
             handle
         } else {
             return Err(GlError::InvalidWindowHandle);

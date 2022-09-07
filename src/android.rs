@@ -23,7 +23,7 @@ impl GlContext {
             crate::Api::Gles => {}
         }
 
-        let handle = if let RawWindowHandle::Android(handle) = parent.raw_window_handle() {
+        let handle = if let RawWindowHandle::AndroidNdk(handle) = parent.raw_window_handle() {
             handle
         } else {
             log::error!("invalid window handle: {:?}", parent.raw_window_handle());
